@@ -3,19 +3,19 @@ const fs = require("fs");
 const readline = require("readline");
 
 const rl = readline.createInterface({
-    input: fs.createReadStream(path.join(__dirname, "input.txt")),
-    crlfDelay: Infinity
+  input: fs.createReadStream(path.join(__dirname, "input.txt")),
+  crlfDelay: Infinity,
 });
 
 let totalIncreases = 0;
 let lastDepth = undefined;
 rl.on("line", (line) => {
-    const depth = Number(line);
-    if (lastDepth !== undefined && lastDepth < depth) {
-        totalIncreases += 1;
-    }
+  const depth = Number(line);
+  if (lastDepth !== undefined && lastDepth < depth) {
+    totalIncreases += 1;
+  }
 
-    lastDepth = depth;
+  lastDepth = depth;
 });
 
-rl.on("close", () => console.log(totalIncreases))
+rl.on("close", () => console.log(totalIncreases));
