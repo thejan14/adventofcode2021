@@ -9,18 +9,20 @@ const rl = readline.createInterface({
 
 let depth = 0;
 let horizontalPos = 0;
+let aim = 0;
 rl.on("line", (line) => {
     const value = Number(line.charAt(line.length - 1));
     const direction = line.charAt(0);
     switch (direction) {
         case "f":
             horizontalPos += value;
+            depth += aim * value;
             break;
         case "d":
-            depth += value;
+            aim += value;
             break;
         case "u":
-            depth -= value;
+            aim -= value;
             break;
     }
 });
