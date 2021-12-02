@@ -10,4 +10,4 @@ For running the code you need the [Node.js runtime](https://nodejs.org/en/) inst
 node dayXX/partX.js
 ```
 
-You can also have a look at my repl at [https://repl.it/@thejan14/adventofcode2021](https://repl.it/@thejan14/adventofcode2021).
+You can also have a look at my repl at [https://repl.it/@thejan14/adventofcode2021](https://repl.it/@thejan14/adventofcode2021). Use the shell to run the solution of your choice.
