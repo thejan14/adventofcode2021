@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const data = fs
   .readFileSync(path.join(__dirname, "input.txt"), "utf8")
-  .split("\r\n");
+  .split("\n");
 
 const oxyGenRating = findRating(data, 0, (bitBalance) => bitBalance >= 0);
 const co2GenRating = findRating(data, 0, (bitBalance) => bitBalance < 0);
