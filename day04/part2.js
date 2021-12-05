@@ -30,20 +30,14 @@ for (const number of draw) {
     }
   });
 
-  boards
-    .map(
-      (board, i) =>
-        !winners.includes(i) &&
-        (board.some((line) => line.every((n) => n.marked)) ||
-          columns
-            .map((i) => board.map((line) => line[i]))
-            .some((column) => column.every((n) => n.marked)))
-    )
-    .forEach((winner, i) => {
-      if (winner) {
-        winners.push(i);
-      }
-    });
+  boards.forEach((board, i) => {
+    if (
+      !winners.includes(i) &&
+      (someLineIsMarked(board) || someColumnIsMarked(board))
+    ) {
+      winners.push(i);
+    }
+  });
 
   if (winners.length === boards.length) {
     const lastWinner = boards[winners[winners.length - 1]];
@@ -54,4 +48,14 @@ for (const number of draw) {
     console.log(number * score);
     return;
   }
+}
+
+function someLineIsMarked(board) {
+  return board.some((line) => line.every((n) => n.marked));
+}
+
+function someColumnIsMarked(board) {
+  return columns
+    .map((i) => board.map((line) => line[i]))
+    .some((column) => column.every((n) => n.marked));
 }
