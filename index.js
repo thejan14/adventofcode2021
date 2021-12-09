@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const cp = require("child_process");
+let { performance } = require("perf_hooks");
 
 const dayFolderRegex = /day\d{2}/;
 const solutionScriptRegex = /part[12]\.js/;

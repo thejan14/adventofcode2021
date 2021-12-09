@@ -1,2 +1,2 @@
 language = "node"
-run = "node day01/part1.js"
+run = "node index.js"
