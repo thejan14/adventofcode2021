@@ -33,12 +33,11 @@ async function run() {
 
 function runAndBenchmark(dirName, fileName) {
   return new Promise((resolve) => {
-    let start;
     let output = "";
+    let start = performance.now();
     const solution = cp.fork(path.join(__dirname, dirName, fileName), {
       stdio: "pipe",
     });
-    solution.on("spawn", () => (start = performance.now()));
     solution.on("close", () => {
       const execTime = performance.now() - start;
       resolve(
