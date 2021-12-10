@@ -1,18 +1,18 @@
 const path = require("path");
 const fs = require("fs");
-const readline = require("readline");
+let { performance } = require("perf_hooks");
 
-const rl = readline.createInterface({
-  input: fs.createReadStream(path.join(__dirname, "input.txt")),
-  crlfDelay: Infinity,
-});
+const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const execStart = performance.now();
+
+/* begin solution */
 
 const batchSize = 3;
 let lineNumber = 0;
 let totalIncreases = 0;
 let depthsBatch = Array(3);
 let lastBatchSum = undefined;
-rl.on("line", (line) => {
+input.split("\n").forEach((line) => {
   depthsBatch[lineNumber % batchSize] = Number(line);
   if (lineNumber >= batchSize) {
     const batchSum = depthsBatch.reduce((a, b) => a + b, 0);
@@ -26,4 +26,10 @@ rl.on("line", (line) => {
   lineNumber += 1;
 });
 
-rl.on("close", () => console.log(totalIncreases));
+const answer = totalIncreases;
+
+/* end solution */
+
+const execEnd = performance.now();
+const micros = (execEnd - execStart) * 1000;
+console.log(`${answer} (${micros.toFixed(2)} µs)`);

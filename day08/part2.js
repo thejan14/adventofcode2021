@@ -1,10 +1,15 @@
 const path = require("path");
 const fs = require("fs");
+let { performance } = require("perf_hooks");
+
+const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const execStart = performance.now();
+
+/* begin solution */
 
 const possibleCharacters = ["a", "b", "c", "d", "e", "f", "g"];
 
-const data = fs
-  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
+const data = input
   .split("\n")
   .map((line) => line.split(" | "))
   .map(([patterns, outputs]) => [patterns.split(" "), outputs.split(" ")]);
@@ -60,7 +65,7 @@ for (const [patterns, outputs] of data) {
   sum += getOutputValue(outputs, segmentAssignements);
 }
 
-console.log(sum);
+const answer = sum;
 
 /*
  * Count the number of occurences for each character in all 10 patterns.
@@ -127,3 +132,9 @@ function getNumberFromPattern(pattern) {
       return "";
   }
 }
+
+/* end solution */
+
+const execEnd = performance.now();
+const micros = (execEnd - execStart) * 1000;
+console.log(`${answer} (${micros.toFixed(2)} µs)`);

@@ -1,15 +1,15 @@
 const path = require("path");
 const fs = require("fs");
-const readline = require("readline");
+let { performance } = require("perf_hooks");
 
-const rl = readline.createInterface({
-  input: fs.createReadStream(path.join(__dirname, "input.txt")),
-  crlfDelay: Infinity,
-});
+const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const execStart = performance.now();
+
+/* begin solution */
 
 let depth = 0;
 let horizontalPos = 0;
-rl.on("line", (line) => {
+input.split("\n").forEach((line) => {
   const value = Number(line.charAt(line.length - 1));
   const direction = line.charAt(0);
   switch (direction) {
@@ -25,4 +25,10 @@ rl.on("line", (line) => {
   }
 });
 
-rl.on("close", () => console.log(depth * horizontalPos));
+const answer = depth * horizontalPos;
+
+/* end solution */
+
+const execEnd = performance.now();
+const micros = (execEnd - execStart) * 1000;
+console.log(`${answer} (${micros.toFixed(2)} µs)`);

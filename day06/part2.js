@@ -1,10 +1,13 @@
 const path = require("path");
 const fs = require("fs");
+let { performance } = require("perf_hooks");
 
-const lanternFish = fs
-  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
-  .split(",")
-  .map((n) => Number(n));
+const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const execStart = performance.now();
+
+/* begin solution */
+
+const lanternFish = input.split(",").map((n) => Number(n));
 
 // count fish with "age" at respective array position
 let ageGroups = Array.from({ length: 9 }, () => 0);
@@ -21,4 +24,10 @@ for (let i = 0; i < 256; i++) {
   ageGroups = newAgeGroups;
 }
 
-console.log(ageGroups.reduce((a, b) => a + b));
+const answer = ageGroups.reduce((a, b) => a + b);
+
+/* end solution */
+
+const execEnd = performance.now();
+const micros = (execEnd - execStart) * 1000;
+console.log(`${answer} (${micros.toFixed(2)} µs)`);

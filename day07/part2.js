@@ -1,8 +1,13 @@
 const path = require("path");
 const fs = require("fs");
+let { performance } = require("perf_hooks");
 
-const crabPositions = fs
-  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
+const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const execStart = performance.now();
+
+/* begin solution */
+
+const crabPositions = input
   .split(",")
   .map((n) => Number(n));
 
@@ -24,8 +29,14 @@ const totalFuelCostHigher = crabPositions
   .map((n) => getFuelCost(Math.abs(higherAvg - n)))
   .reduce((a, b) => a + b);
 
-console.log(Math.min(totalFuelCostLower, totalFuelCostHigher));
+const answer = Math.min(totalFuelCostLower, totalFuelCostHigher);
 
 function getFuelCost(distance) {
   return (distance * (distance + 1)) / 2;
 }
+
+/* end solution */
+
+const execEnd = performance.now();
+const micros = (execEnd - execStart) * 1000;
+console.log(`${answer} (${micros.toFixed(2)} µs)`);

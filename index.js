@@ -1,7 +1,6 @@
 const path = require("path");
 const fs = require("fs");
 const cp = require("child_process");
-let { performance } = require("perf_hooks");
 
 const dayFolderRegex = /day\d{2}/;
 const solutionScriptRegex = /part[12]\.js/;
@@ -27,23 +26,19 @@ async function run() {
     );
 
   for (const [dirName, fileName] of solutions) {
-    console.log(await runAndBenchmark(dirName, fileName));
+    console.log(await execute(dirName, fileName));
   }
 }
 
-function runAndBenchmark(dirName, fileName) {
+function execute(dirName, fileName) {
   return new Promise((resolve) => {
     let output = "";
-    let start = performance.now();
     const solution = cp.fork(path.join(__dirname, dirName, fileName), {
       stdio: "pipe",
     });
-    solution.on("close", () => {
-      const execTime = performance.now() - start;
-      resolve(
-        `${dirName}/${fileName} => ${output.trim()} (${execTime.toFixed(2)} ms)`
-      );
-    });
+    solution.on("close", () =>
+      resolve(`${dirName}/${fileName} => ${output.trim()}`)
+    );
     solution.stdout.on("data", (d) => (output += d));
   });
 }

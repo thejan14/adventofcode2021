@@ -1,5 +1,11 @@
 const path = require("path");
 const fs = require("fs");
+let { performance } = require("perf_hooks");
+
+const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const execStart = performance.now();
+
+/* begin solution */
 
 const directions = [
   [-1, 0],
@@ -8,8 +14,7 @@ const directions = [
   [0, -1],
 ];
 
-const heightMap = fs
-  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
+const heightMap = input
   .split("\n")
   .map((line) =>
     line.split("").map((n) => ({ height: Number(n), visited: false }))
@@ -25,12 +30,10 @@ for (let i = 0; i < heightMap.length; i++) {
   }
 }
 
-console.log(
-  results
-    .sort((a, b) => b - a)
-    .slice(0, 3)
-    .reduce((a, b) => a * b)
-);
+const answer = results
+  .sort((a, b) => b - a)
+  .slice(0, 3)
+  .reduce((a, b) => a * b);
 
 function getBasinSizeFrom(i, j) {
   heightMap[i][j].visited = true;
@@ -53,3 +56,9 @@ function getBasinSizeFrom(i, j) {
       .reduce((a, b) => a + b)
   );
 }
+
+/* end solution */
+
+const execEnd = performance.now();
+const micros = (execEnd - execStart) * 1000;
+console.log(`${answer} (${micros.toFixed(2)} µs)`);

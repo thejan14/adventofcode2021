@@ -1,8 +1,13 @@
 const path = require("path");
 const fs = require("fs");
+let { performance } = require("perf_hooks");
 
-const data = fs
-  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
+const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const execStart = performance.now();
+
+/* begin solution */
+
+const data = input
   .split("\n")
   .map((line) =>
     line.split(" -> ").map((coord) => coord.split(",").map((n) => Number(n)))
@@ -24,7 +29,7 @@ const overlaps = Object.keys(coordinateOccurencesDict).filter(
   (k) => coordinateOccurencesDict[k] > 1
 );
 
-console.log(overlaps.length);
+const answer = overlaps.length;
 
 function getVentCoordinates([[x1, y1], [x2, y2]]) {
   if (x1 === x2) {
@@ -45,3 +50,9 @@ function getVentCoordinates([[x1, y1], [x2, y2]]) {
     );
   }
 }
+
+/* end solution */
+
+const execEnd = performance.now();
+const micros = (execEnd - execStart) * 1000;
+console.log(`${answer} (${micros.toFixed(2)} µs)`);

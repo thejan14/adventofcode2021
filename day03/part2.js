@@ -1,14 +1,18 @@
 const path = require("path");
 const fs = require("fs");
+let { performance } = require("perf_hooks");
 
-const data = fs
-  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
-  .split("\n");
+const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const execStart = performance.now();
+
+/* begin solution */
+
+const data = input.split("\n");
 
 const oxyGenRating = findRating(data, 0, (bitBalance) => bitBalance >= 0);
 const co2GenRating = findRating(data, 0, (bitBalance) => bitBalance < 0);
 
-console.log(oxyGenRating * co2GenRating);
+const answer = oxyGenRating * co2GenRating;
 
 function findRating(currRange, bitPosition, bitCriteria) {
   const bitBalance = getBitBalanceInPosition(currRange, bitPosition);
@@ -32,3 +36,9 @@ function getBitBalanceInPosition(range, bitPosition) {
     0
   );
 }
+
+/* end solution */
+
+const execEnd = performance.now();
+const micros = (execEnd - execStart) * 1000;
+console.log(`${answer} (${micros.toFixed(2)} µs)`);

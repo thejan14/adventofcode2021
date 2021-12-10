@@ -1,10 +1,14 @@
 const path = require("path");
 const fs = require("fs");
+let { performance } = require("perf_hooks");
+
+const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const execStart = performance.now();
+
+/* begin solution */
 
 // split by double line feed to separate draw and boards
-const data = fs
-  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
-  .split("\n\n");
+const data = input.split("\n\n");
 
 const whitespacesRegex = / +/;
 const draw = data[0].split(",").map((n) => Number(n));
@@ -17,6 +21,7 @@ const boards = data.slice(1).map((board) =>
   )
 );
 
+let answer;
 const columns = [...Array(boards[0][0].length).keys()];
 for (const number of draw) {
   boards.forEach((board) =>
@@ -40,7 +45,13 @@ for (const number of draw) {
       .flatMap((line) => line.filter((n) => !n.marked))
       .map((n) => n.number)
       .reduce((a, b) => a + b);
-    console.log(number * score);
-    return;
+    answer = number * score;
+    break;
   }
 }
+
+/* end solution */
+
+const execEnd = performance.now();
+const micros = (execEnd - execStart) * 1000;
+console.log(`${answer} (${micros.toFixed(2)} µs)`);

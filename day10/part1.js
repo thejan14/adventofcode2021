@@ -1,9 +1,13 @@
 const path = require("path");
 const fs = require("fs");
+let { performance } = require("perf_hooks");
 
-const subsystemCode = fs
-  .readFileSync(path.join(__dirname, "input.txt"), "utf8")
-  .split("\n");
+const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const execStart = performance.now();
+
+/* begin solution */
+
+const subsystemCode = input.split("\n");
 
 let result = 0;
 for (const line of subsystemCode) {
@@ -20,7 +24,7 @@ for (const line of subsystemCode) {
   }
 }
 
-console.log(result);
+const answer = result;
 
 function isOpeningBracket(bracketChar) {
   return (
@@ -60,3 +64,9 @@ function getCharacterScore(illegialChar) {
       return 0;
   }
 }
+
+/* end solution */
+
+const execEnd = performance.now();
+const micros = (execEnd - execStart) * 1000;
+console.log(`${answer} (${micros.toFixed(2)} µs)`);
