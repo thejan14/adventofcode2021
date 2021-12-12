@@ -13,43 +13,37 @@ const data = input
     line.split(" -> ").map((coord) => coord.split(",").map((n) => Number(n)))
   );
 
-// count how often each coordinate is hit
-const coordinateOccurencesDict = {};
-for (const lineSegment of data) {
-  getVentCoordinates(lineSegment).forEach((coord) => {
-    if (coordinateOccurencesDict[coord]) {
-      coordinateOccurencesDict[coord] += 1;
-    } else {
-      coordinateOccurencesDict[coord] = 1;
-    }
-  });
-}
-
-const overlaps = Object.keys(coordinateOccurencesDict).filter(
-  (k) => coordinateOccurencesDict[k] > 1
-);
-
-const answer = overlaps.length;
-
-function getVentCoordinates([[x1, y1], [x2, y2]]) {
-  if (x1 === x2) {
-    const start = y1 < y2 ? y1 : y2;
-    const length = Math.abs(y1 - y2) + 1;
-    return Array.from({ length }, (_, i) => `${x1},${start + i}`);
-  } else if (y1 == y2) {
-    const start = x1 < x2 ? x1 : x2;
-    const length = Math.abs(x1 - x2) + 1;
-    return Array.from({ length }, (_, i) => `${start + i},${y1}`);
-  } else {
-    const length = Math.abs(x1 - x2) + 1;
-    const xChange = (x1 - x2) / Math.abs(x1 - x2);
-    const yChange = (y1 - y2) / Math.abs(y1 - y2);
-    return Array.from(
-      { length },
-      (_, i) => `${x1 - xChange * i},${y1 - yChange * i}`
-    );
+// remember coordinates where vents occur
+const vents = {};
+let overlaps = 0;
+data.forEach(([[x1, y1], [x2, y2]]) => {
+  let xChange = 0;
+  let yChange = 0;
+  if (x1 !== x2) {
+    xChange = (x1 - x2) / Math.abs(x1 - x2);
   }
-}
+
+  if (y1 !== y2) {
+    yChange = (y1 - y2) / Math.abs(y1 - y2);
+  }
+
+  const length = xChange !== 0 ? Math.abs(x1 - x2) + 1 : Math.abs(y1 - y2) + 1;
+  for (let i = 0; i < length; i++) {
+    const a = x1 - xChange * i;
+    const b = y1 - yChange * i;
+
+    // use a pairing function (Cantor) to uniquely encode coordinates
+    const coord = 0.5 * (a + b) * (a + b + 1) + b;
+    if (!vents[coord]) {
+      vents[coord] = 1;
+    } else if (vents[coord] === 1) {
+      vents[coord] = 2;
+      overlaps += 1;
+    }
+  }
+});
+
+const answer = overlaps;
 
 /* end solution */
 
