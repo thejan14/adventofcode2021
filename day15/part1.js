@@ -24,17 +24,18 @@ costs[0][0] = 0;
 
 while (frontier.length > 0) {
   const [x, y] = frontier.shift();
-  directions
-    .map(([a, b]) => [x + a, y + b])
-    .filter(([a, b]) => riskMap[a] && riskMap[a][b])
-    .forEach(([a, b]) => {
+  for (const [i, j] of directions) {
+    const a = x + i;
+    const b = y + j;
+    if (riskMap[a] && riskMap[a][b]) {
       const currRisk = costs[x][y] + riskMap[a][b];
       const prevRisk = costs[a][b];
       if (!prevRisk || currRisk < prevRisk) {
         frontier.push([a, b]);
         costs[a][b] = currRisk;
       }
-    });
+    }
+  }
 }
 
 const answer = costs[riskMap.length - 1][riskMap[0].length - 1];
